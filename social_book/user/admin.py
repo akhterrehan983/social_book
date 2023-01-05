@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import userDetails
+from .models import *
+admin.site.register(User)
+# from .models import userDetails
 # Register your models here.
    
-admin.site.register(userDetails)
+# admin.site.register(userDetails)
