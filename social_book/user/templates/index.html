@@ -267,9 +267,23 @@
 							<span class="micon dw dw-calendar1"></span><span class="mtext">Authors and Sellers</span>
 						</a>
 					</li>
-					
-
-					
+					<li>
+						<a class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar1"></span><span class="mtext">
+									<form action="upload" method="POST" enctype="multipart/form-data">
+										{% csrf_token %}
+										<input type="file" name="file" accept=".jpeg,.pdf" />
+									<br>
+										<button> upload </button>
+									</form>
+							</span>
+						</a>
+					</li>
+					<li>
+						<a href="show" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-calendar1"></span><span class="mtext">Uploaded Books</span>
+						</a>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -283,6 +297,10 @@
 			<div class="card-box pd-20 height-100-p mb-30">
 			{% for user in users %}
 			{{user}}
+			</br>
+			{% endfor %}
+			{% for file in files %}
+			{{file}}
 			</br>
 			{% endfor %}
 			</div>

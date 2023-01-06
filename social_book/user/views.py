@@ -1,6 +1,6 @@
 from django.shortcuts import render,HttpResponse
 # from django.contrib.auth.models import User
-from .models import User
+from .models import User,file
 from django.contrib.auth import authenticate
 # from .models import userDetails
 # Create your views here.
@@ -49,8 +49,27 @@ def authorsAndSellers(request):
     print(users[0].email)
     return render(request,"index.html",{"users":users})
 
-    pass
 def filterUser(request):
     users = User.objects.filter(public_visibility=True)
     print(users[0].password)
     return render(request,"filterUser.html",{"users":users})
+
+def upload(request):
+    x = request.FILES["file"]
+
+    f = file(email = request.session["email"], upload_to=x)
+    f.save()
+
+    return render(request, "index.html")
+
+
+def show(request):
+    files = file.objects.filter(email=request.session["email"])
+    # print("rehan",f)
+    l = []
+    files = list(files)
+    # print(files[0].upload_to,type(files[0].upload_to))
+    for i in range(len(files)):
+        l.append(str(files[i].upload_to))
+    # print(l)
+    return render(request, "index.html", {"files": l})

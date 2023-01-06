@@ -23,8 +23,10 @@ urlpatterns = [
     path("logout",views.logout,name="logout"),
     path("home",views.home,name="home"),
     path("authorsAndSellers",views.authorsAndSellers,name="authorsAndSellers"),
-    
     path("filterUser",views.filterUser,name="filterUser"),
+    path("upload",views.upload,name="upload"),
+    path("show",views.show,name="show"),
+
     
     
 
