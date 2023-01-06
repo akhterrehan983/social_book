@@ -1,11 +1,18 @@
 from django.shortcuts import render,HttpResponse
 # from django.contrib.auth.models import User
+from django.http import JsonResponse
 from .models import User,file
 from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import make_password,check_password
+from rest_framework.decorators import api_view
+import requests
+import json
 # from .models import userDetails
 # Create your views here.
 
 def home(request):
+    if "token" in request.session:
+        print(request.session["token"])
     if request.session.get('email'):
         return render(request,"index.html")
     else:
@@ -14,19 +21,28 @@ def home(request):
 def login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
-        password = request.POST.get('pwd')
-        user = User.objects.filter(email=email,password=password)
-        print(user)
-        if user:
-            request.session["email"] = email
-            return render(request,"index.html")  
+        u = User.objects.filter(email=email)
+        # user = User.objects.filter(email=email,password=make_password(password))
+        if u:
+            password = request.POST.get('pwd')
+            if check_password(password,u[0].password):
+                request.session["email"] = email
+                response = requests.post("http://127.0.0.1:8000/api/v1/token/login",json={"email":email,
+    "password":password})
+                response = json.loads(response.text)
+                request.session["token"] = response["auth_token"]
+                return render(request,"index.html")  
+            else:
+                return HttpResponse("login failed") 
         else:
             return HttpResponse("login failed") 
     return render(request,"login.html")  
 
 def logout(request):
-    if request.session["email"]:
+    if "email" in request.session:
         del request.session["email"]
+    if "auth_token" in request.session:
+        del request.session["auth_token"]
     return render(request,"login.html")
 
 def register(request):
@@ -36,7 +52,7 @@ def register(request):
         else:
             public_visibility = False
         print(public_visibility)
-        ob = User(email = request.POST.get('email'),password = request.POST.get('pwd'),
+        ob = User(email = request.POST.get('email'),password = make_password(request.POST.get('pwd')),
         address = request.POST.get('address'),public_visibility=public_visibility)
         ob.save()
         return HttpResponse("user added successfully")
@@ -65,11 +81,17 @@ def upload(request):
 
 def show(request):
     files = file.objects.filter(email=request.session["email"])
-    # print("rehan",f)
     l = []
-    files = list(files)
-    # print(files[0].upload_to,type(files[0].upload_to))
-    for i in range(len(files)):
-        l.append(str(files[i].upload_to))
-    # print(l)
-    return render(request, "index.html", {"files": l})
+    response = requests.get("http://127.0.0.1:8000/authenticate",headers={"Authorization":"token "+request.session["token"]})
+    # print(response)
+    response = json.loads(response.text)
+    if response['detail'] == "Valid token":
+        files = list(files)
+        for i in range(len(files)):
+            l.append(str(files[i].upload_to))
+        return render(request, "index.html", {"files": l})
+    return render(request, "index.html")
+
+@api_view(["GET"])
+def authenticate(request):
+    return JsonResponse({"detail":'Valid token'})
