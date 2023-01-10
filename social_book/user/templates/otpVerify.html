@@ -43,7 +43,7 @@
                         <img src="{% static 'vendors/images/deskapp-logo.svg' %}" alt="">
                     </a>
                 </div>
-             
+
             </div>
         </div>
         <div class="register-wrap d-flex align-items-center flex-wrap justify-content-center">
@@ -55,23 +55,16 @@
                     <div class="col-md-6 col-lg-5">
                         <div class="2-box bg-white box-shadow border-radius-10">
                             <div class="register-title">
-                                <h2 class="text-center text-primary">Login to Home Page</h2>
+                                <h2 class="text-center text-primary">Verify Otp to Login</h2>
                             </div>
-                            <form action="login" method="POST">
+                            <form action="otpVerify" method="POST">
                                 {% csrf_token %}
-                                
-                                <div class="input-group custom">
-                                    <input type="email" class="form-control form-control-lg" name="email"
-                                        placeholder="email">
 
-                                </div>
                                 <div class="input-group custom">
-                                    <input type="password" class="form-control form-control-lg" name="pwd"
-                                        placeholder="password">
-
+                                    <input type="text" class="form-control form-control-lg" name="otp"
+                                        placeholder="Enter otp">
                                 </div>
 
-                            
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="input-group mb-0">
@@ -81,12 +74,11 @@
 										-->
                                             <input type="submit" class="btn btn-primary btn-lg btn-block" />
                                         </div>
-                                        <div class="font-16 weight-600 pt-10 pb-10 text-center" data-color="#707373">OR
-                                        </div>
-                                        <div class="input-group mb-0">
-                                            <a class="btn btn-outline-primary btn-lg btn-block"
-                                                href="register">Register To Create Account</a>
-                                        </div>
+                                        
+                                        <!-- <div class="input-group mb-0">
+                                            <a class="btn btn-outline-primary btn-lg btn-block" href="register">Register
+                                                To Create Account</a>
+                                        </div> -->
 
                                         {% if messages %}
                                         {% for message in messages %}

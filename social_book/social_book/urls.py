@@ -14,24 +14,23 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
 from user import views
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("register",views.register,name="register"),
-    path("login",views.login,name="login"),
-    path("logout",views.logout,name="logout"),
-    path("home",views.home,name="home"),
-    path("authorsAndSellers",views.authorsAndSellers,name="authorsAndSellers"),
-    path("filterUser",views.filterUser,name="filterUser"),
-    path("upload",views.upload,name="upload"),
-    path("show",views.show,name="show"),
-
-    path("authenticate",views.authenticate,name="authenticate"),
-    path("api/v1/", include('djoser.urls')),
-    path("api/v1/", include('djoser.urls.authtoken')),
-
+    path("register", views.register, name="register"),
+    path("login", views.login, name="loginn"),
+    path("otpVerify", views.otpVerify, name="otpVerify"),
+    path("logout", views.logout, name="logout"),
+    path("home", views.home, name="home"),
+    path("authorsAndSellers", views.authorsAndSellers, name="authorsAndSellers"),
+    path("upload", views.upload, name="upload"),
+    path("showfiles", views.showfiles, name="showfiles"),
     
-    
-
+    # apis
+    path("show", views.show, name="show"),
+    path("authenticate", views.authenticate, name="authenticate"),
+    path("api/v1/", include("djoser.urls")),
+    path("api/v1/", include("djoser.urls.authtoken")),
 ]
